@@ -1,6 +1,8 @@
 import { ref, computed } from "vue";
 import axios from 'axios'
 
+const serverURL = "https://ehp-server.herokuapp.com";
+
 const state = ref({
     members: [],
     games: [
@@ -43,7 +45,7 @@ function changeMember(edtMember) {
 
 function loadMembersFromServer() {
     // axios.get('http://127.0.0.1/test.php')
-    axios.get('https://stclb-server.herokuapp.com/test.php')
+    axios.get(serverURL + '/getMembers.php')
     .then(response => {
         loadMembers( response.data)
     } )
