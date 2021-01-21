@@ -3,29 +3,23 @@
     <table class="w3-table-all">
       <thead>
         <tr>
-          <th v-for="k in ['gamedate', 'gamedesc', 'teamevent']" :key="k">
+          <th v-for="k in ['Description', 'Is Team Event']" :key="k">
             {{ k }}
           </th>
           <th></th>
           <th></th>
         </tr>
       </thead>
-      <tr v-for="(game, index) in games" :key="index">
-        <td
-          v-for="(k, index) in ['gamedate', 'gamedesc', 'teamevent']"
-          :key="index"
-        >
+      <tr v-for="(game, gindex) in games" :key="gindex">
+        <td v-for="(k, index) in ['desc', 'teamevent']" :key="index">
           {{ game[k] }}
         </td>
         <td>
-          <button @click="editGame(game['gamedate'], index)">Edit</button>
+          <button @click="editGame(game, gindex)">Edit</button>
         </td>
         <td>
-          <!-- <button @click="deleteGame(game['gamedate'], index)">Del</button> -->
-          <button @click="deleteGame(index)">Del</button>
+          <button @click="deleteGame(game, gindex)">Del</button>
         </td>
-        <!-- <td><button>Edit</button></td>
-        <td><button>Del</button></td> -->
       </tr>
     </table>
     <GameEdit
@@ -33,13 +27,13 @@
       @cancelEdit="cancelEdit"
       @commitEdit="commitEdit"
       :index="index"
-      :gameDate="gameDate"
     />
   </div>
 </template>
 
 <script>
 import { ref, computed } from "vue";
+// eslint-disable-next-line no-unused-vars
 import { getGames, changeGame, deleteGameByIndex } from "@/store.js";
 import GameEdit from "@/components/GameEdit";
 
@@ -49,8 +43,9 @@ export default {
   },
   setup() {
     const showEdit = ref(false);
-    const gameDate = ref("");
     const index = ref(null);
+
+    const games = computed(() => getGames.value);
 
     function cancelEdit() {
       showEdit.value = false;
@@ -61,20 +56,18 @@ export default {
       showEdit.value = false;
     }
 
-    function editGame(gamedate, foundIndex) {
-      gameDate.value = gamedate;
-      index.value = foundIndex;
+    function editGame(g, i) {
+      index.value = i;
       showEdit.value = true;
     }
 
-    function deleteGame(index) {
-      deleteGameByIndex(index);
+    function deleteGame(g, i) {
+      deleteGameByIndex(i);
     }
 
     return {
-      gameDate,
       index,
-      games: computed(() => getGames.value),
+      games,
       showEdit,
       editGame,
       deleteGame,

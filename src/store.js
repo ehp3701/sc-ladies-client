@@ -5,16 +5,45 @@ const serverURL = "https://ehp-server.herokuapp.com";
 
 const state = ref({
     members: [],
-    games: [
-        {gamedate: "2021-01-07", gamedesc: "Blind Draw BB of Partners", teamevent: "Y"},
-        {gamedate: "2021-01-14", gamedesc: "Beat the Pro", teamevent: "N"},
-        {gamedate: "2021-01-21", gamedesc: "2 Person Scramble; A+D; B+C Flighted (9 Hole Inv)", teamevent: "Y"},
-        {gamedate: "2021-01-28", gamedesc: "18 Hole Invitational", teamevent: "N"}
-    ]
+    games: [],
 })
 
-const getMembers = computed(() => state.value.members);
+/* 
+ * *********************************************************************
+ * Games related
+ * *********************************************************************
+*/
 const getGames = computed(() => state.value.games);
+
+function addGame(game) {
+    state.value.games.push(game);
+}
+
+
+function changeGame(gamedata) {
+    Object.assign(state.value.games[gamedata.index], gamedata.edtGame);
+}
+
+function deleteGameByIndex(index) {
+    state.value.games.splice(index,1);
+}
+
+function getGameDescFromServer() {
+    axios.get('https://ehp-server.herokuapp.com/getGameDesc.php')
+    .then(response => {
+        state.value.games = response.data;
+    } )
+    .catch( error => {
+        console.log(error)
+    })
+}
+
+/* 
+ * *********************************************************************
+ * Members related
+ * *********************************************************************
+*/
+const getMembers = computed(() => state.value.members);
 
 function addMember(member) {
     state.value.members.push(member);
@@ -31,8 +60,18 @@ function loadMembers(members) {
    state.value.members = members;
 }
 
-function getMemberByCN(cn) {
-    return state.value.members.find( m => m.clubnumber == cn );
+function loadMembersFromServer() {
+    axios.get(serverURL + '/getMembers.php')
+    .then(response => {
+        loadMembers( response.data)
+    } )
+    .catch( error => {
+        console.log(error)
+    })
+}
+
+function getMemberByClubNumber(clubnumber) {
+    return state.value.members.find( m => m.clubnumber == clubnumber );
 }
 
 function changeMember(edtMember) {
@@ -43,45 +82,17 @@ function changeMember(edtMember) {
     }
 }
 
-function loadMembersFromServer() {
-    // axios.get('http://127.0.0.1/test.php')
-    axios.get(serverURL + '/getMembers.php')
-    .then(response => {
-        loadMembers( response.data)
-    } )
-    .catch( error => {
-        console.log(error)
-    })
-}
-
-function addGame(game) {
-    state.value.games.push(game);
-}
-
-function getGame(gamedate) {
-    return state.value.games.find( g => g.gamedate == gamedate );
-}
-
-function changeGame(gamedata) {
-    Object.assign(state.value.games[gamedata.index], gamedata.edtGame);
-}
-
-function deleteGameByIndex(index) {
-    state.value.games.splice(index,1);
-}
-
 loadMembersFromServer();
+getGameDescFromServer();
 
 export {
     getMembers,
     addMember,
     deleteMember,
     loadMembers,
-    getMemberByCN,
+    getMemberByClubNumber,
     changeMember,
-    loadMembersFromServer,
 
-    getGame,
     getGames,
     addGame,
     changeGame,
