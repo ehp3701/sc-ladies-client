@@ -12,11 +12,7 @@
         </p> -->
         <p>
           <label>Game Description</label><br />
-          <input
-            class="w3-input"
-            type="text"
-            v-model="description"
-          />
+          <input class="w3-input" type="text" v-model="description" />
         </p>
         <p>
           <span class="w3-margin">
@@ -65,8 +61,8 @@ export default {
 
     function commitGame() {
       context.emit("commitGame", {
-        desc: description.value,
-        teamevent: teamevent.value
+        gamedesc: description.value,
+        teamevent: teamevent.value,
       });
     }
 
@@ -80,7 +76,7 @@ export default {
 };
 </script>
 
-<style  scoped>
+<style scoped>
 .modal {
   position: absolute;
   top: 50%;

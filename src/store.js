@@ -16,20 +16,53 @@ const state = ref({
 const getGames = computed(() => state.value.games);
 
 function addGame(game) {
-    state.value.games.push(game);
+    const url = serverURL + '/postGame.php'
+    const json =  JSON.stringify({
+        gamedesc : game.gamedesc,
+        teamevent : game.teamevent
+    })
+    axios.post(url, json)
+    .then(response => {
+        console.log(response.data);
+        loadGamesFromServer();
+    } )
+    .catch( error => {
+        console.log(error)
+    })
 }
 
-
-function changeGame(gamedata) {
-    Object.assign(state.value.games[gamedata.index], gamedata.edtGame);
+function putGame(game) {
+    console.log("game", game);
+    const url = serverURL + '/putGame.php'
+    const json =  JSON.stringify({
+        gamedesc : game.gamedesc,
+        teamevent : game.teamevent
+    })
+    axios.put(url, json)
+    .then(response => {
+        console.log(response.data);
+        loadGamesFromServer();
+    } )
+    .catch( error => {
+        console.log(error)
+    })
 }
 
-function deleteGameByIndex(index) {
-    state.value.games.splice(index,1);
+function deleteGameFromServer(game) {
+    const url = serverURL + '/deleteGame.php?key=' + game.key;
+    axios.get(url)
+    .then(response => {
+        console.log(response.data);
+        loadGamesFromServer();
+    } )
+    .catch( error => {
+        console.log(error)
+    })
 }
 
-function getGameDescFromServer() {
-    axios.get('https://ehp-server.herokuapp.com/getGameDesc.php')
+function loadGamesFromServer() {
+    const url = serverURL + '/getGameDesc.php'
+    axios.get(url)
     .then(response => {
         state.value.games = response.data;
     } )
@@ -83,7 +116,7 @@ function changeMember(edtMember) {
 }
 
 loadMembersFromServer();
-getGameDescFromServer();
+loadGamesFromServer();
 
 export {
     getMembers,
@@ -95,7 +128,7 @@ export {
 
     getGames,
     addGame,
-    changeGame,
-    deleteGameByIndex,
+    putGame,
+    deleteGameFromServer,
 
 }

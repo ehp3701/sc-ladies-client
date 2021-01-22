@@ -19,9 +19,9 @@
             <option
               v-for="(game, gindex) in games"
               :key="gindex"
-              :value="game.desc"
+              :value="game.gamedesc"
             >
-              {{ game.desc }}
+              {{ game.gamedesc }}
             </option>
           </datalist>
         </p>
@@ -60,7 +60,6 @@
 </template>
 
 <script>
-
 import { ref, computed } from "vue";
 
 import { getGames } from "@/store.js";
@@ -72,7 +71,7 @@ export default {
   props: {
     index: Number,
   },
-  
+
   setup(props, context) {
     const index = computed(() => props.index);
     const game = computed(() => {
@@ -82,7 +81,7 @@ export default {
       return getGames.value;
     });
 
-    const description = ref(game.value.desc);
+    const description = ref(game.value.gamedesc);
     const teamevent = ref(game.value.teamevent);
 
     function cancelEdit() {
@@ -91,11 +90,8 @@ export default {
 
     function commitEdit() {
       context.emit("commitEdit", {
-        index: index.value,
-        edtGame: {
-          desc: description.value,
-          teamevent: teamevent.value,
-        },
+        gamedesc: description.value,
+        teamevent: teamevent.value,
       });
     }
 

@@ -11,7 +11,7 @@
         </tr>
       </thead>
       <tr v-for="(game, gindex) in games" :key="gindex">
-        <td v-for="(k, index) in ['desc', 'teamevent']" :key="index">
+        <td v-for="(k, index) in ['gamedesc', 'teamevent']" :key="index">
           {{ game[k] }}
         </td>
         <td>
@@ -34,7 +34,7 @@
 <script>
 import { ref, computed } from "vue";
 // eslint-disable-next-line no-unused-vars
-import { getGames, changeGame, deleteGameByIndex } from "@/store.js";
+import { getGames, putGame, deleteGameFromServer } from "@/store.js";
 import GameEdit from "@/components/GameEdit";
 
 export default {
@@ -52,7 +52,7 @@ export default {
     }
 
     function commitEdit(gamedata) {
-      changeGame(gamedata);
+      putGame(gamedata);
       showEdit.value = false;
     }
 
@@ -61,8 +61,9 @@ export default {
       showEdit.value = true;
     }
 
+    // eslint-disable-next-line no-unused-vars
     function deleteGame(g, i) {
-      deleteGameByIndex(i);
+      deleteGameFromServer(g);
     }
 
     return {
