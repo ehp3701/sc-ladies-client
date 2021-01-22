@@ -38,8 +38,6 @@ function putGame(game) {
         gamedesc : game.gamedesc,
         teamevent : game.teamevent
     })
-    console.log("url", url);
-    console.log("json", json);
 
     axios.post(url, json)
     .then(response => {
