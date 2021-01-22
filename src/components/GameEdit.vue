@@ -81,6 +81,7 @@ export default {
       return getGames.value;
     });
 
+    const key = game.value.key;
     const description = ref(game.value.gamedesc);
     const teamevent = ref(game.value.teamevent);
 
@@ -90,6 +91,7 @@ export default {
 
     function commitEdit() {
       context.emit("commitEdit", {
+        key: key,
         gamedesc: description.value,
         teamevent: teamevent.value,
       });

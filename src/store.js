@@ -32,12 +32,15 @@ function addGame(game) {
 }
 
 function putGame(game) {
-    console.log("game", game);
     const url = serverURL + '/putGame.php'
     const json =  JSON.stringify({
+        key: game.key,
         gamedesc : game.gamedesc,
         teamevent : game.teamevent
     })
+    console.log("url", url);
+    console.log("json", json);
+
     axios.put(url, json)
     .then(response => {
         console.log(response.data);
