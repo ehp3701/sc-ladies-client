@@ -41,7 +41,7 @@ function putGame(game) {
     console.log("url", url);
     console.log("json", json);
 
-    axios.put(url, json)
+    axios.post(url, json)
     .then(response => {
         console.log(response.data);
         loadGamesFromServer();
