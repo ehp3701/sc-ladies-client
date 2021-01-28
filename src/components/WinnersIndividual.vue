@@ -22,7 +22,9 @@
     </div>
 
     <div class="w3-col m6 w3-center">
-      <div v-for="(w, index) in winners" :key="index">
+        <WinnersListIndividual :winners="winners" />
+
+      <!-- <div v-for="(w, index) in winners" :key="index">
         <strong>{{ index }} Place: &nbsp;&nbsp;{{ scores[index] }} </strong>
         <br /><br />
         <span
@@ -37,26 +39,30 @@
         <br /><br />
       </div>
       <button @click="commitToDatabase">Commit to Database</button>
-    </div>
+     -->
+     </div>
   </div>
 </template>
 
 <script>
 import PlaceChoice from "./PlaceChoice";
+import WinnersListIndividual from "./WinnersListIndividual";
 import { getGames, getMembers } from "@/store.js";
 import { ref, computed } from "vue";
 
 export default {
   components: {
-    PlaceChoice,
+    PlaceChoice, WinnersListIndividual,
   },
   props: {
     selectedGame: Object,
+    // selectedFlight: String,
   },
   setup(props) {
     const selectedGame = computed(() => props.selectedGame);
     const currentAssignedClubNo = new Set();
     const selectedPlace = ref(0);
+    let selectedFlight = "";
 
     const winners = ref({
       First: [],
@@ -85,7 +91,10 @@ export default {
 
       ev.target.className = selectedPlace.value;
 
-      const winner = Object.assign({}, m);
+      const winner = Object.assign({}, {
+          flight: selectedFlight,
+          member: m
+      });
       winners.value[selectedPlace.value].push(winner);
       currentAssignedClubNo.add(winner.clubnumber);
     }
@@ -98,8 +107,10 @@ export default {
     }
 
     function psChange(info) {
+      console.log("info", info);
       selectedPlace.value = info.place;
       scores.value = info.scores;
+      selectedFlight = info.flight;
     }
 
     function commitToDatabase(){

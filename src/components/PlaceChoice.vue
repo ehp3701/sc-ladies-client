@@ -63,8 +63,31 @@
     </tr>
   </table>
   <datalist id="scores">
-    <option v-for="(score,index) in scoreList" :key="index" :value="score">{{score}}</option>
+    <option v-for="(score, index) in scoreList" :key="index" :value="score">
+      {{ score }}
+    </option>
   </datalist>
+  &nbsp;&nbsp; Flight:&nbsp;
+  <input
+    id="flight"
+    type="text"
+    v-model="selectedFlight"
+    size="6"
+    list="flightlist"
+    @click="selectedFlight = ''"
+  />
+  <datalist id="flightlist">
+    <option value="A+B">A+B</option>
+    <option value="A+D">A+D</option>
+    <option value="B+C">B+C</option>
+    <option value="C+D">C+D</option>
+    <option value="A">A</option>
+    <option value="B">B</option>
+    <option value="C">C</option>
+    <option value="D">D</option>
+  </datalist>
+
+  {{selectedFlight}}
 </template>
 
 <script>
@@ -74,6 +97,7 @@ export default {
   emits: ["placeScoreChange"],
 
   setup(props, context) {
+    const selectedFlight = ref("");
     const selectedPlace = ref(0);
     const firstScore = ref("");
     const secondScore = ref("");
@@ -95,7 +119,7 @@ export default {
     });
 
     const placeScores = computed(() => {
-      return { place: selectedPlace.value, scores: scores.value };
+      return { place: selectedPlace.value, scores: scores.value, flight: selectedFlight.value };
     });
 
     watch(placeScores, () => {
@@ -103,6 +127,7 @@ export default {
     });
 
     return {
+      selectedFlight,
       selectedPlace,
       scores,
       firstScore,

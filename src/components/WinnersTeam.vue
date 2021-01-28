@@ -66,14 +66,13 @@ export default {
   },
   props: {
     selectedGame: Object,
+    // selectedFlight: String,
   },
   setup(props) {
     const selectedGame = computed(() => props.selectedGame);
 
     const currentAssigned = new Set();
     const selectedPlace = ref(0);
-    // const places = { 1: "First", 2: "Second", 3: "Third" };
-    // const place_colors = { 1: "First", 2: "Second", 3: "Third" };
     const currentTeam = ref([]);
     const winners = ref({
       First: [],
@@ -82,7 +81,6 @@ export default {
     });
     const scores = ref({});
 
-    // eslint-disable-next-line no-unused-vars
     function selectMember(m, ev) {
       if (selectedGame.value == "") {
         alert("NO GAME SELECTED");

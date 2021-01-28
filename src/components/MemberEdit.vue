@@ -30,6 +30,14 @@
           <label>Home Phone</label>
           <input id="homephone" class="w3-input" type="text" :value="member.homephone" />
         </p>
+        <p>
+          <label>Flight</label>
+          <input id="flight" class="w3-input" type="text" :value="member.flight" />
+        </p>
+        <p>
+          <label>League</label>
+          <input id="league" class="w3-input" type="text" :value="member.league" />
+        </p>
         <div class="w3-bar">
           <button class="w3-button w3-red" @click="cancelEdit">Cancel</button>
           <button class="w3-button w3-green" @click="commitEdit">Commit</button>
@@ -41,22 +49,20 @@
 
 <script>
 import { computed } from "vue";
-import { getMemberByCN } from "@/store.js";
+import { getMemberByClubNumber } from "@/store.js";
 
 export default {
-
   emits: ["cancelEdit", "commitEdit"],
-  
+
   props: {
-    memberNumber: String
+    memberNumber: String,
   },
   setup(props, context) {
-
     const memberNum = computed(() => props.memberNumber);
-    const member = computed(()=> {
-      return getMemberByCN(memberNum.value);
-    })
-  
+    const member = computed(() => {
+      return getMemberByClubNumber(memberNum.value);
+    });
+
     function cancelEdit() {
       context.emit("cancelEdit", "Edit has been cancelled");
     }
@@ -69,19 +75,21 @@ export default {
         email: document.getElementById("email").value,
         cellphone: document.getElementById("cellphone").value,
         homephone: document.getElementById("homephone").value,
+        flight: document.getElementById("flight").value,
+        league: document.getElementById("league").value,
       });
     }
 
     return {
       cancelEdit,
       commitEdit,
-      member
+      member,
     };
   },
 };
 </script>
 
-<style  scoped>
+<style scoped>
 .modal {
   position: absolute;
   top: 50%;
@@ -93,5 +101,3 @@ export default {
   text-align: center;
 }
 </style>
-
-v
